@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="microtemplating.js"></script>
+    </head>
+    <body>
+        <div id="chat"></div>
+        <style>
+            body {
+                background: #eee;
+                font-family: Arial;
+            }
+            #chat {
+                margin: auto;
+                max-width: 32em;
+            }
+            .message {
+                margin: 20px;
+                padding: 20px;
+                border-radius: 10px;
+                background: white;
+            }
+            .i {
+                font-size: 0.8em;
+                float: right;
+                margin-top: 1em;
+                color: #aaa;
+            }
+        </style>
+        <script type="text/template" id="message_template">
+            <div class="message">
+                <p><%=message%><br><span class="i"><%=i%></span></p>
+            </div>
+        </script>
+        <script type="module">
+            let messages = await fetch('chat.json').then(rs => rs.json()).then(rs => rs.messages);
+            let html = messages.map((message, i) => tmpl("message_template", {message: message, i: i+1}));
+            document.getElementById("chat").innerHTML = html.join("");
+        </script>
+    </body>
+</html>
